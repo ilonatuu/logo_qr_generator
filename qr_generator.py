@@ -1,39 +1,28 @@
-import qrcode
-from PIL import Image
-
-Logo_link = "images/duappy_illustrator.png"
-
-logo = Image.open(Logo_link)
-
-basewidth = 400
-
-wpercent = (basewidth/float(logo.size[0]))
-hsize = int((float(logo.size[1])*float(wpercent)))
-logo = logo.resize((basewidth, hsize), Image.LANCZOS)
+# import qrcode
+from qrcode import QRCode, constants
+from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.moduledrawers.pil import RoundedModuleDrawer
+from qrcode.image.styles.colormasks import SolidFillColorMask
 
 
-QRcode = qrcode.QRCode(version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_H,
-    box_size=33,
+qr = QRCode(version=1,
+    error_correction=constants.ERROR_CORRECT_H,     
+    box_size=30,
     border=2
 )
-
 url = "https://duappy.com"
+qr.add_data(url)
+qr.make()
 
-QRcode.add_data(url)
 
-QRcode.make()
+img_3 = qr.make_image(
+    image_factory=StyledPilImage, 
+    module_drawer=RoundedModuleDrawer(), 
+    embeded_image_path="images/duappy_illustrator.png",
+    eye_drawer=RoundedModuleDrawer(),
+    color_mask=SolidFillColorMask(back_color=(255, 255, 255), front_color=(230, 57, 70)) 
+    ).convert("RGB")
 
-QRcolor = "#E63946"
-
-QRimg = QRcode.make_image(
-    fill_color=QRcolor, back_color="white").convert("RGB")
-
-pos = ((QRimg.size[0] - logo.size[0]) // 2, 
-       (QRimg.size[1] - logo.size[1]) // 2)
-
-QRimg.paste(logo, pos)
-
-QRimg.save('logo_qr.png')
+img_3.save('logo_qr.png')
 
 print("QR generated")
