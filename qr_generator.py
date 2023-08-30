@@ -23,6 +23,6 @@ img_3 = qr.make_image(
     color_mask=SolidFillColorMask(back_color=(255, 255, 255), front_color=(230, 57, 70)) 
     ).convert("RGB")
 
-img_3.save('logo_qr.png')
+img_3.save('newlogo_qr.png')
 
 print("QR generated")
